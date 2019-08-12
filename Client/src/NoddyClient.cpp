@@ -1,14 +1,20 @@
-#define _WINSOCK_DEPRECATED_NO_WARNINGS
-
 #include <iostream>
-#include <winsock2.h>
 
-#pragma comment(lib,"ws2_32.lib") //Winsock Library
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netdb.h>
+#include <arpa/inet.h>
+#include <netinet/in.h>
+#include <unistd.h>
+
+using namespace std;
 
 void maine(char* hostname)
 {
-	WSADATA wsa;
-	SOCKET s;
+	int s;
 	struct sockaddr_in server;
 
 //	char* hostname = (char*)"127.0.0.1";
@@ -17,12 +23,8 @@ void maine(char* hostname)
 	struct in_addr** addr_list;
 	int i;
 
-
-	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
-		throw("could not initialize winsock");
-
 	s = socket(AF_INET, SOCK_STREAM, 0);
-	if (s == INVALID_SOCKET)
+	if (s < 0)
 		throw("could not create socket");
 
 	he = gethostbyname(hostname);
@@ -35,7 +37,7 @@ void maine(char* hostname)
 	for (i = 0; addr_list[i] != NULL; i++)
 	{
 		//Return the first one;
-		strcpy_s(ip, inet_ntoa(*addr_list[i]));
+		strcpy(ip, inet_ntoa(*addr_list[i]));
 	}
 
 	server.sin_addr.s_addr = inet_addr(ip);
@@ -56,14 +58,12 @@ void maine(char* hostname)
 
 	//pretend to care about reply from the server to delay things long enough that server does not throw exceptions
 	recv_size = recv(s, server_reply, 2000, 0);
-
-	if (recv_size == SOCKET_ERROR)
+	if (recv_size < 0)
 		throw("recv failed");
 
-	Sleep(100);
+	sleep(100);
 
-	closesocket(s);
-	WSACleanup();
+	close(s);
 }
 
 int main(int argc, char* argv[])
@@ -74,15 +74,15 @@ int main(int argc, char* argv[])
 	}
 	catch (char* err)
 	{
-		std::cout << err << std::endl;
+		cout << err << endl;
 		return 1;
 	}
 	catch (...)
 	{
-		std::cout << "bad params" << std::endl;
+		cout << "bad params" << endl;
 		return 1;
 	}
 
-	std::cout << "OK" << std::endl;
+	cout << "OK" << endl;
 	return 0;
 }
