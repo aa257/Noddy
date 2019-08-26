@@ -1,2 +1,0 @@
-java -jar "NoddyServer.jar" jdbc:sqlite:noddy.db
-

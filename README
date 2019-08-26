@@ -1,1 +1,95 @@
-mini web service proof of concept
+Mini web service proof of concept.
+
+******************************************
+
+How to set up directories
+
+in top directory:
+
+1) mkdir source
+2) mkdir deploy
+2) mkdir deploy/noddy
+3) mkdir deploy/noddy/Client
+4) mkdir deploy/noddy/Server
+5) mkdir deploy/noddy/Client/dist
+6) mkdir deploy/noddy/Server/dist
+7) cd source
+8) git clone https://github.com/aa257/noddy.git
+9) cd ..
+
+******************************************
+
+How to set up database
+
+1) install sqlite, available from https://www.sqlite.org/
+2) using GUI tool, create blank database at source/noddy/noddy.db
+3) initialize with sql command below
+
+CREATE TABLE "noddysync" ( "license" TEXT )
+
+
+
+******************************************
+
+How to compile client
+
+1) install g++, available from https://gcc.gnu.org/
+
+2)
+cd source/noddy/Client/src/
+g++ NoddyClient.cpp -o NoddyClient
+mv NoddyClient ../../../../deploy/noddy/Client/dist
+
+
+******************************************
+
+How to run client
+
+1)
+cd ../../../../deploy/noddy/Client/dist
+
+./NoddyClient 127.0.0.1
+
+2) Should substitute server's ip address for 127.0.0.1
+3) Currently port hardcoded
+4) Tested on ipv4
+
+******************************************
+
+How to compile server
+
+ 1) install jdk, this was tested not on openjdk but on oracle jdk,
+    available from https://www.oracle.com/technetwork/java/javase/downloads/
+
+ 2) set up path
+ 3) set up class path
+ 4) install netbeans, available from https://netbeans.org/
+ 5) configure netbeans to use your jdk installation
+
+ 6) install sqlite driver sqlite-jdbc-3.28.0.jar,
+    available from https://github.com/xerial/sqlite-jdbc
+
+ 7) open the project source/noddy/Server in netbeans
+ 8) under projects/libraries GUI, edit settings for sqlite driver jar
+    configure it to use your driver installation
+    mine is C:\jars\sqlite-jdbc-3.28.0.jar
+
+ 9) from "Run" menu, choose "Clean and Build Project"
+    this should create directory /source/noddy/Server/dist
+
+10)
+cd ../../../../source/noddy/Server/
+mv dist/ ../../../../deploy/noddy/Server/dist
+cd ..
+cp noddy.db ../../../deploy/noddy/Server/dist
+
+******************************************
+
+How to run server
+
+1)
+cd ../../../deploy/Noddy/Client/dist
+java -jar "NoddyServer.jar" jdbc:sqlite:noddy.db
+
+2) Currently port hardcoded
+3) Tested on ipv4
