@@ -6,16 +6,17 @@ How to set up directories
 
 in top directory:
 
-1) mkdir source
-2) mkdir deploy
-2) mkdir deploy/noddy
-3) mkdir deploy/noddy/Client
-4) mkdir deploy/noddy/Server
-5) mkdir deploy/noddy/Client/dist
-6) mkdir deploy/noddy/Server/dist
-7) cd source
-8) git clone https://github.com/aa257/noddy.git
-9) cd ..
+1)
+mkdir source
+mkdir deploy
+mkdir deploy/noddy
+mkdir deploy/noddy/Client
+mkdir deploy/noddy/Server
+mkdir deploy/noddy/Client/dist
+mkdir deploy/noddy/Server/dist
+cd source
+git clone https://github.com/aa257/noddy.git
+cd ..
 
 ******************************************
 
@@ -26,33 +27,6 @@ How to set up database
 3) initialize with sql command below
 
 CREATE TABLE "noddysync" ( "license" TEXT )
-
-
-
-******************************************
-
-How to compile client
-
-1) install g++, available from https://gcc.gnu.org/
-
-2)
-cd source/noddy/Client/src/
-g++ NoddyClient.cpp -o NoddyClient
-mv NoddyClient ../../../../deploy/noddy/Client/dist
-
-
-******************************************
-
-How to run client
-
-1)
-cd ../../../../deploy/noddy/Client/dist
-
-./NoddyClient 127.0.0.1
-
-2) Should substitute server's ip address for 127.0.0.1
-3) Currently port hardcoded
-4) Tested on ipv4
 
 ******************************************
 
@@ -78,18 +52,46 @@ How to compile server
     this should create directory /source/noddy/Server/dist
 
 10)
-cd ../../../../source/noddy/Server/
-mv dist/ ../../../../deploy/noddy/Server/dist
+cd source/noddy/Server/
+cp -r dist/ ../../../deploy/noddy/Server/dist
 cd ..
-cp noddy.db ../../../deploy/noddy/Server/dist
+cp noddy.db ../../deploy/noddy/Server/dist/
 
 ******************************************
 
 How to run server
 
 1)
-cd ../../../deploy/Noddy/Client/dist
-java -jar "NoddyServer.jar" jdbc:sqlite:noddy.db
+cd ../../deploy/noddy/Server/dist
+sudo java -jar "NoddyServer.jar" jdbc:sqlite:noddy.db
 
 2) Currently port hardcoded
 3) Tested on ipv4
+
+
+******************************************
+
+How to compile client
+
+in top directory:
+
+1) install g++, available from https://gcc.gnu.org/
+
+2)
+cd source/noddy/Client/src/
+g++ NoddyClient.cpp -o NoddyClient
+cp NoddyClient ../../../../deploy/noddy/Client/dist
+
+
+******************************************
+
+How to run client
+
+1)
+cd ../../../../deploy/noddy/Client/dist
+./NoddyClient 127.0.0.1
+
+2) Should substitute server's ip address for 127.0.0.1
+3) Server should already be running or client will die with "bad params" error
+4) Currently port hardcoded
+5) Tested on ipv4
