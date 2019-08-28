@@ -63,9 +63,9 @@ How to run server
 
 1)
 cd ../../deploy/noddy/Server/dist
-sudo java -jar "NoddyServer.jar" jdbc:sqlite:noddy.db
+sudo java -jar "NoddyServer.jar" jdbc:sqlite:noddy.db 20000
 
-2) Currently port hardcoded
+2) params are DSN and port
 3) Tested on ipv4
 
 
@@ -93,5 +93,5 @@ cd ../../../../deploy/noddy/Client/dist
 
 2) Should substitute server's ip address for 127.0.0.1
 3) Server should already be running or client will die with "bad params" error
-4) Currently port hardcoded
+4) Currently port hardcoded to 20000
 5) Tested on ipv4
