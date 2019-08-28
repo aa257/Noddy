@@ -53,7 +53,7 @@ How to compile server
 
 10)
 cd source/noddy/Server/
-cp -r dist/ ../../../deploy/noddy/Server/dist
+cp -r dist/ ../../../deploy/noddy/Server/
 cd ..
 cp noddy.db ../../deploy/noddy/Server/dist/
 
