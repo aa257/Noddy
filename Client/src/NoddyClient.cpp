@@ -78,7 +78,6 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	char* command = argv[0];
 	char* url     = argv[1];
 	int   port    = atoi(argv[2]);
 
