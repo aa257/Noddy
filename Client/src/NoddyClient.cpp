@@ -12,12 +12,11 @@
 
 using namespace std;
 
-void maine(char* hostname)
+void get(char* hostname, int myPort, char* license)
 {
 	int s;
 	struct sockaddr_in server;
 
-//	char* hostname = (char*)"127.0.0.1";
 	char ip[100];
 	struct hostent* he;
 	struct in_addr** addr_list;
@@ -42,15 +41,22 @@ void maine(char* hostname)
 
 	server.sin_addr.s_addr = inet_addr(ip);
 
-//	server.sin_addr.s_addr = inet_addr("127.0.0.1");
 	server.sin_family = AF_INET;
-	server.sin_port = htons(20000);
+	server.sin_port = htons(myPort);
 
 	if (connect(s, (struct sockaddr*) &server, sizeof(server)) < 0)
 		throw("could not connect to server");
 
-	char* message = (char*)"GET /noddy.cgi?license=noddy HTTP/1.1\r\n\r\n";
-	if (send(s, message, strlen(message), 0) < 0)
+	char* preL  = (char*)"GET /insert?license=";
+	char* postL = (char*)" HTTP/1.1\r\n\r\n";
+
+	if (send(s, preL, strlen(preL), 0) < 0)
+		throw("send failed");
+
+	if (send(s, license, strlen(license), 0) < 0)
+		throw("send failed");
+
+	if (send(s, postL, strlen(postL), 0) < 0)
 		throw("send failed");
 
 	char server_reply[2000];
@@ -61,16 +67,28 @@ void maine(char* hostname)
 	if (recv_size < 0)
 		throw("recv failed");
 
-	sleep(100);
-
 	close(s);
 }
 
 int main(int argc, char* argv[])
 {
+	if (argc < 4)
+	{
+		cout << "missing params" << endl;
+		return 1;
+	}
+
+	char* command = argv[0];
+	char* url     = argv[1];
+	int   port    = atoi(argv[2]);
+
 	try
 	{
-		maine(argv[1]);
+		for (int p = 3; p < argc; p++)
+		{
+			char* license = argv[p];
+			get(url, port, license);
+		}
 	}
 	catch (char* err)
 	{
@@ -79,7 +97,7 @@ int main(int argc, char* argv[])
 	}
 	catch (...)
 	{
-		cout << "bad params" << endl;
+		cout << "could not connect" << endl;
 		return 1;
 	}
 
