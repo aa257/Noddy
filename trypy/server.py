@@ -1,8 +1,12 @@
 import time
 import socket
+import sys
+
+arg1 = int(sys.argv[1])
+args = ('',arg1)
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.bind(('', 20000))
+s.bind(args)
 s.listen(5)
 
 while True:
