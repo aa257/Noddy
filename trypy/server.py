@@ -1,6 +1,7 @@
 import time
 import socket
 import sys
+import sqlite3
 
 def serve(csok, license):
  csok.send(b"HTTP/1.1 200 OK\n")
@@ -32,11 +33,25 @@ def serve(csok, license):
  csok.close()
  return
 
+
 arg1 = int(sys.argv[1])
-args = ('',arg1)
+arg2 = sys.argv[2]
+
+con = sqlite3.connect(arg2)
+cur = con.cursor()
+
+cur.execute("select license from noddysync")
+for row in cur: 
+ for column in row:
+  print(column)
+
+con.commit()
+con.close()
+
+Sargs = ('',arg1)
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.bind(args)
+s.bind(Sargs)
 s.listen(5)
 
 while True:
