@@ -29,6 +29,7 @@ def serve(csok, license):
  csok.send(b"<form action='/reset' method='get'><input type='submit' value='Reset Table' /></form>\n")
  csok.send(b"<form action='/list' method='get'><input type='submit' value='List Table' /></form>\n")
  csok.sendall(b"</body></html>\n")
+ csok.close()
  return
 
 arg1 = int(sys.argv[1])
