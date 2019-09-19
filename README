@@ -1,6 +1,6 @@
-Mini web service proof of concept
+Mini ipv4 web service proof of concept
 
-***********************************
+**************************************
 server usage:
  cd daserver
  python3 server.py portNum dsn
@@ -8,7 +8,7 @@ server usage:
 eg:
  python3 server.py 20000 sqlite.db
 
-***********************************
+**************************************
 client usage:
  cd daclient
  ./client ipAddress portNum varargs
