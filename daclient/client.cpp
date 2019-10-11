@@ -65,13 +65,18 @@ void get(char* hostname, int myPort, char* license)
 	if (send(s, postL, strlen(postL), 0) < 0)
 		throw NoddyException("send failed");
 
-	char server_reply[2000];
-	int recv_size;
-
 	//pretend to care about reply from the server to delay things long enough that server does not throw exceptions
-	recv_size = recv(s, server_reply, 2000, 0);
-	if (recv_size < 0)
-		throw NoddyException("recv failed");
+	for (;;) {
+		char server_reply[2000];
+		memset(server_reply, 0, sizeof(server_reply));
+		int recv_size = recv(s, server_reply, sizeof(server_reply)-1, 0);
+		if (recv_size < 0)
+			throw NoddyException("recv failed");
+		if (recv_size == 0)
+			break;
+		// it is assumed here the return is printable for now
+		fprintf(stderr, "%s", server_reply);
+	}
 
 	close(s);
 }
