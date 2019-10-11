@@ -15,7 +15,7 @@ using namespace std;
 
 class NoddyException : public std::runtime_error {
 public:
-    NoddyException(const string& msg = "") : runtime_error(msg) {}
+	NoddyException(const string& msg = "") : runtime_error(msg) {}
 };
 
 void get(char* hostname, int myPort, char* license)
